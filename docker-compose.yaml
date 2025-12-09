@@ -1,0 +1,33 @@
+version: '3.8' # Boa prática indicar a versão (opcional nas versões mais novas)
+
+services:
+  backend:
+    build:
+      context: .
+    ports:
+      - "3001:3001"
+    environment:
+      # O hostname 'mongo' aqui deve bater com o nome do serviço abaixo
+      - MONGO_URL=mongodb://mongo:27017/meuBanco
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017" # Exposto para acessar via Compass/localmente
+    volumes:
+      - mongo-data:/data/db # Persistência de dados
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
