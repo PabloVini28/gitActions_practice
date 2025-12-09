@@ -7,13 +7,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Code checkout
-      uses: actions/checkout@v4
-
     - name: Node.js Configuration
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+    
+    - name: Code checkout
+      uses: actions/checkout@v4
+
+    - name: Containers Docker Compose
+      run: docker compose up -d --build
+      
+    - name: Aguardar inicialização (Sleep)
+      run: sleep 15
+      
+    - name: Mostrar logs do container Backend
+      run: docker compose logs backend
 
     - name: Run Script
       run: |
